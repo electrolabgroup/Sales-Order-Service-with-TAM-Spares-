@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+            <style>
+        @media print {
+    @page {
+        margin: 0; /* Remove default page margins */
+        padding: 0; /* Remove default page padding */
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .container, .container * {
+        visibility: visible;
+    }
+
+    .container {
+        position: absolute;
+        left: 0mm;
+        right: 0mm;
+        font-family: Arial, sans-serif;
+        bottom: 0;
+        width: 90mm; /* Set to 90mm */
+        min-height: 29mm; /* Set to 29mm */
+        font-size: 13pt;
+        margin: 0;
+        padding: 0;
+        border: none;
+        page-break-after: always; /* Ensure the container starts a new page */
+    }
+
+            .footer {
+                display: none;
+            }
+            .no-print {
+                display: none !important; /* Hide elements with class 'no-print' */
+            }
+            table {
+                width: 100%; /* Ensure the table fits within the container */
+                border-collapse: collapse; /* Ensure no extra spacing in table */
+                margin: 0;
+                padding: 0;
+            }
+            tr, td, th {
+                page-break-inside: avoid; /* Avoid breaking table row inside */
+            }
+            td, th {
+                word-wrap: break-word; /* Break long words to prevent overflow */
+                padding: 0;
+                margin: 0;
+            }
+            .edit-button {
+                display: none !important; /* Hide elements with class 'no-print' */
+            }
+            .letterhead-row {
+                display: table-row !important; /* Ensure the letterhead row is displayed in print */
+            }
+            .line-item.page-break-bottom td {
+                border-bottom: none; /* Remove bottom border for label */
+            }
+        }
+
+            .container {
+            font-family: Arial, sans-serif;
+            width: 130mm; /* A4 width */
+            height: 29mm; /* A4 height */
+            margin: 0 auto; /* Center on the page */
+            padding: 10mm; /* Margin from the edge of the paper */
+            border-radius: 10px;
+            background-color: #ffffff;
+
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Letterhead Image -->
+   <table>
+        <tr>
+            <td colspan="2" contenteditable="true"><strong>{{customer}}</strong></td>
+        </tr>
+
+        <tr><td contenteditable="true"><strong>PO NO: {{po_no}}</strong> </td></tr>
+       <tr>
+            <td colspan="2" contenteditable="true"><strong>{{item_name}}</strong></td>
+        </tr>
+        <tr><td contenteditable="true"><strong>Part Code: {{item_code}}</strong></td></tr>
+        <tr><td contenteditable="true"><strong>QTY: {{qty}}</strong></td><td rowspan="3"><img src="{{ url_for('static', filename='ELEC.png') }}" alt="Letterhead Image" class="letterhead-img" /></td></tr>
+        <tr><td contenteditable="true"><strong>Sales Order No:{{sales_order}}</strong></td></tr>
+    </table>
+
+
+    <div class="footer">
+        <button onclick="window.print()">Print Label</button>
+    </div>
+</div>
+
+<script>
+    function setManufactureYear() {
+        var manufactureYearInput = document.getElementById('manufacture_year_input');
+        var year = prompt('Enter the manufacturing year:');
+        var manufactureYearText = document.getElementById('manufacture_year_text');
+        if (year !== null) {
+            manufactureYearText.innerHTML = 'Manufacture Year: <span><b>' + year + '</b></span>';
+            manufactureYearInput.style.display = 'none'; // Hide the input field
+        }
+    }
+
+    function clearManufactureYear() {
+        var manufactureYearText = document.getElementById('manufacture_year_text');
+        manufactureYearText.innerHTML = ''; // Clear the text
+        document.getElementById('manufacture_year_input').value = ''; // Clear the input field value
+        document.getElementById('manufacture_year_input').style.display = 'inline'; // Show the input field
+    }
+</script>
+</body>
+</html>

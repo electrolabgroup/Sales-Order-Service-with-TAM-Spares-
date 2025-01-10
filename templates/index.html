@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Order Service</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        input[type="text"], select, button {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button, a.button {
+            background-color: #008080;
+            color: white;
+            cursor: pointer;
+            width: 150px; /* Set a consistent width */
+            height: 40px; /* Set a consistent height */
+            text-align: center;
+            border: none; /* Optional: remove border if needed */
+            border-radius: 4px; /* Optional: match border-radius */
+            }
+        button:hover, a.button:hover {
+            background-color: #005353;
+        }
+            .form-container {
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                margin-top: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+        .inline-form {
+            display: inline-block;
+            margin-right: 10px; /* Adjust this value for spacing between buttons */
+        }
+
+            /* Unique styling for the download button link */
+        #downloadButtonLink {
+            position: absolute;
+            right: 30px;
+            top: 7%;  /* Adjusted to center vertically */
+            transform: translateY(-50%);
+            text-decoration: none; /* Removes underline if any */
+        }
+
+        #downloadButtonLink button {
+            background-color: #008080;
+            color: white;
+            cursor: pointer;
+            width: 200px; /* Set a consistent width */
+            height: 40px; /* Set a consistent height */
+            text-align: center;
+            border: none; /* Optional: remove border if needed */
+            border-radius: 4px; /* Optional: match border-radius */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #downloadButtonLink button i {
+            margin-right: 8px;
+            font-size: 20px; /* Adjust the icon size */
+        }
+
+        #downloadButtonLink button:hover {
+            background-color: #005353; /* Darken on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form action="/" method="post">
+            <label for="name">Sales Order No.:</label>
+            <input type="text" id="name" name="name" required>
+            <button type="submit">Search</button>
+        </form>
+
+        <a href="/generate_excel" id="downloadButtonLink">  
+            <button>Download TAM for Spares </button>   
+        </a>
+
+
+        {% if item_names %}
+<form id="certificateForm" action="/print_certificate" method="post">
+    <input type="hidden" id="name" name="name" value="{{ request.form['name'] }}" required>
+    <label for="selected_item_name">Select Item:</label>
+    <select id="selected_item_name" name="selected_item_name">
+        {% for item_name in item_names %}
+        <option value="{{ item_name }}">{{ item_name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" id="certificateButton" name="print_certificate">Quality Certificate</button>
+    <button type="submit" id="stickerButton" name="print_sticker">Item Label</button>
+</form>
+
+<script>
+    document.getElementById('certificateButton').addEventListener('click', function() {
+        document.getElementById('certificateForm').action = '/print_certificate';
+    });
+
+    document.getElementById('stickerButton').addEventListener('click', function() {
+        document.getElementById('certificateForm').action = '/print_sticker';
+    });
+</script>
+
+
+<div class="form-container">
+    <form action="/print_si" method="post" class="inline-form">
+        <input type="hidden" name="name" value="{{ request.form['name'] }}" required>
+        <button type="submit" name="print_shipping_list">Shipping Instruction</button>
+    </form>
+
+    <form action="/print_ci" method="post" class="inline-form">
+        <input type="hidden" name="name" value="{{ request.form['name'] }}" required>
+        <button type="submit" name="print_ci">Commercial Invoice</button>
+    </form>
+
+    <form action="/packing_list" method="post" class="inline-form">
+        <input type="hidden" name="name" value="{{ request.form['name'] }}" required>
+        <button type="submit" name="print_pl">Packing List(Export)</button>
+    </form>
+
+     <form action="/packing_list_spares" method="post" class="inline-form">
+        <input type="hidden" name="name" value="{{ request.form['name'] }}" required>
+        <button type="submit" name="print_scomet">Packing List(Domestic)</button>
+    </form>
+
+
+    <form action="/non_dgr" method="post" class="inline-form">
+        <input type="hidden" name="name" value="{{ request.form['name'] }}" required>
+        <button type="submit" name="print_dgr">DGR</button>
+    </form>
+
+    <form action="/scomet_page" method="post" class="inline-form">
+        <input type="hidden" name="name" value="{{ request.form['name'] }}" required>
+        <button type="submit" name="print_scomet">SCOMET</button>
+    </form>
+</div>
+
+
+
+
+
+        {% endif %}
+
+        <hr>
+
+        {% if certificate_content %}
+        <div>
+            {{ certificate_content | safe }}
+        </div>
+        <br>
+        <a href="/" class="button">Back to Search</a>
+        {% endif %}
+
+        {% if shipping_content %}
+        <div>
+            {{ shipping_content | safe }}
+        </div>
+        <br>
+        <a href="/" class="button">Back to Search</a>
+        {% endif %}
+
+         {% if ci_content %}
+        <div>
+            {{ ci_content | safe }}
+        </div>
+        <br>
+        <a href="/" class="button">Back to Search</a>
+        {% endif %}
+
+        {% if pl_content %}
+        <div>
+            {{ pl_content | safe }}
+        </div>
+        <br>
+        <a href="/" class="button">Back to Search</a>
+        {% endif %}
+
+
+            {% if pl_content_spares %}
+        <div>
+            {{ pl_content_spares | safe }}
+        </div>
+        <br>
+        <a href="/" class="button">Back to Search</a>
+        {% endif %}
+
+
+
+        {% if nondgr_content %}
+        <div>
+            {{ nondgr_content | safe }}
+        </div>
+        <br>
+        <a href="/" class="button">Back to Search</a>
+        {% endif %}
+
+
+                {% if scomet_content %}
+        <div>
+            {{ scomet_content | safe }}
+        </div>
+        <br>
+        <a href="/" class="button">Back to Search</a>
+        {% endif %}
+    </div>
+</body>
+</html>

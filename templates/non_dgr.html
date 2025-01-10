@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commercial Invoice</title>
+    <style>
+/* Ensure proper border collapse and spacing */
+/* General Table Adjustments */
+table {
+    border-collapse: collapse; /* Ensure table borders collapse properly */
+    width: 100%; /* Set table width to 100% */
+    border: 1px solid #000; /* Add border to the entire table */
+}
+
+th, td {
+    border: 1px solid #000; /* Add border to table cells */
+    padding: 6px; /* Increase padding for more space */
+    text-align: left;
+    word-wrap: break-word;
+}
+
+/* Specific to Line Items */
+.line-item td {
+    border-bottom: 1px solid #000; /* Ensure there’s a border to make the line visible */
+    padding: 5px; /* Increase padding to make empty lines more visible */
+    height: 25px; /* Ensure row height is sufficient */
+}
+
+/* Style for the Total row */
+.total-row {
+    font-weight: bold; /* Make the text bold */
+    background-color: #f9f9f9; /* Optional: Add a background color */
+    border-top: 2px solid #000; 
+}
+
+/* .total-row td:last-child {
+    text-align: center; 
+} */
+.total-row td {
+    padding: 10px; /* Increase padding for more space */
+}
+
+@media print {
+    body * {
+        visibility: hidden; /* Hide everything by default */
+    }
+    .container, .container * {
+        visibility: visible; /* Make container and its children visible */
+    }
+    .container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 210mm; /* A4 width */
+        height: 297mm; /* A4 height */
+        padding: 10mm; /* Padding to ensure content is not too close to the edges */
+        box-sizing: border-box; /* Include padding in width and height */
+    }
+    .footer {
+        display: none; /* Hide footer */
+    }
+    .no-print {
+        display: none !important; /* Hide elements with class 'no-print' */
+    }
+    table {
+        width: 100%; /* Ensure the table fits within the container */
+        border-collapse: collapse; /* Remove extra spacing in table */
+        page-break-inside: avoid; /* Avoid breaking inside the table */
+    }
+    tr, td, th {
+        page-break-inside: avoid; /* Avoid breaking rows or cells */
+    }
+    td, th {
+        word-wrap: break-word; /* Break long words to prevent overflow */
+        padding: 5px; /* Ensure sufficient padding */
+        line-height: 1.2;
+    }
+    .edit-button {
+        display: none !important; /* Hide edit buttons */
+    }
+    .letterhead-row {
+        display: table-row !important; /* Ensure letterhead row is displayed */
+    }
+    .line-item.page-break-bottom td {
+        border-bottom: 1px solid #000; /* Add bottom border if needed */
+    }
+    .line-item {
+        height: auto; /* Ensure rows have automatic height based on content */
+    }
+    .page-break {
+        page-break-before: always; /* Force a page break before this element */
+    }
+    button {
+        display: none !important; /* Hide all buttons during print */
+    }
+}
+body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10mm;
+            background-color: #f4f4f4;
+            font-size: 0.7em; /* Reduce font size for the entire body */
+        }
+
+         .container {
+            width: 210mm; 
+            height: auto;
+            margin: 0 auto; /* Center on the page */
+            padding: 10mm; /* Margin from the edge of the paper */
+            font-size: 1.25em;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: #00AB9F;
+            font-size: 1.2em; /* Reduce font size for heading */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px; /* Reduced margin for tables */
+            page-break-inside: auto; /* Ensure tables break correctly */
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 3px; /* Reduced padding for table cells */
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        .small-text {
+            font-size: 0.5em; /* Further reduced font size for small text */
+        }
+
+        .small-height {
+            height: 1px; /* Adjusted height */
+        }
+
+        .edit-button {
+            padding: 2px 4px; /* Reduced padding for edit buttons */
+            background-color: #008080;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.65em; /* Reduce font size for edit buttons */
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 10px; /* Reduced margin for footer */
+        }
+
+        button {
+            padding: 5px 10px; /* Adjusted button padding */
+            background-color: #008080;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 6px; /* Reduced margin for buttons */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .letterhead-row {
+            display: none; /* Hide the letterhead row by default */
+        }
+
+        .center-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+    max-width: 20%;
+}
+
+table {
+    border-collapse: collapse; /* Ensure table borders collapse properly */
+    width: 100%; /* Set table width to 100% */
+    border: 1px solid #000; /* Add border to the entire table */
+}
+
+th, td {
+    border: 1px solid #000; /* Add border to table cells */
+    padding: 3px; /* Add padding to table cells */
+    text-align: left;
+    word-wrap: break-word;
+}
+
+th {
+    background-color: #f2f2f2; /* Optionally, add background color to table headers */
+}
+
+.line-item td {
+        border-top: none; /* Remove top border */
+        border-bottom: none; /* Add bottom border */
+    }
+
+ tr {
+    border-bottom: 1px solid #000; /* Add bottom border to each row */
+}
+tr:last-child {
+    border-bottom: none; /* Remove bottom border from the last row if needed */
+}
+    </style>
+    </head>
+    <body>
+    <div class="container">
+        <h1>Shippers Certification for Non-Hazardous Cargo</h1>
+        <table>
+            <tr>
+                <th>A.W.B.NO.</th>
+                <th>Airport of Departure</th>
+                <th>Airport for Destination</th>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+        </table>
+        <p>
+            This is to certify that the articles/substances of this shipment are properly described by name. That they are not listed in the current edition of Dangerous Goods Regulations (DGR), alphabetical list of dangerous goods. Nor do they correspond to any of the hazard classes appearing in the DGR Section 3 Classification of Dangerous Goods and that they are known to be not dangerous, i.e., not restricted. Furthermore, the shipper confirms that the goods are in proper condition for transportation on passenger-carrying aircraft (DGR Para 8.1.23).
+        </p>
+        <table>
+            <tr>
+                <th>Marks and Number of Packages</th>
+                <th>Proper Description of Goods <br>(Trade Name Not Permitted) Specify Each Article Separately</th>
+                <th>Net Quantity per Package</th>
+            </tr>
+            {% for row in items %}
+            <tr class="line-item">
+                <td contenteditable="true"> </td>
+                <td contenteditable="true">{{ row['item_name'] }}</td>
+                <td contenteditable="true">{{ row['qty'] }}</td>
+            </tr>
+            {% endfor %}
+           
+            {% set total_rows = 15 %}
+            {% set current_rows = items|length %}
+            {% for i in range(current_rows, total_rows) %}
+            <tr class="line-item">
+                <td contenteditable="true"> </td>
+                <td contenteditable="true"> </td>
+                <td contenteditable="true"> </td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="2" style="text-align: right;"><strong>Total</strong></td>
+                <td contenteditable="true">0.00</td>
+            </tr>
+        </table>
+      
+     
+        <div class="footer">
+            <button onclick="window.print()">Print Certification</button>
+        </div>
+    </div>
+    </body>
+   
+</html>
+    
